@@ -10,11 +10,18 @@ import { Feather } from "@expo/vector-icons";
 import { LinkButton } from "@/components/link-button";
 import { useState } from "react";
 import { useNavigation } from "expo-router";
+import { Select } from "@/components/select";
 
 const PHONE_NUMBER = "5521988778644";
 
 export default function Cart() {
-  const [address, setAdress] = useState("");
+  const [clientName, setClientName] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const [addressComplement, setAddressComplement] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [observation, setObservation] = useState("");
   const cartStore = useCartStore();
   const navigation = useNavigation();
 
@@ -38,25 +45,26 @@ export default function Cart() {
   }
 
   function handleOrder() {
-    if (address.trim().length === 0) {
-      return Alert.alert(
-        "Pedido",
-        `Informe os dados da entrega:
-rua, bairro, CEP, número e complemento!
-      `
-      );
+    if (clientName.trim().length === 0) {
+      return Alert.alert("Pedido", `Informe o nome de quem receberá o pedido!`);
     }
 
     const products = cartStore.products
       .map((product) => `\n ${product.quantity} ${product.title}`)
       .join("");
 
-    const message = `\n 🍔 MEU PEDIDO
-      \n Entregar em: ${address}
-
-      ${products}
-
-      \n Valor total: ${total}
+    const message = `
+      \n🍔 MEU PEDIDO
+${products}
+      \nValor total: ${total}
+      \n\nQuem vai receber o pedido:
+${clientName}
+      \n\nEntregar em:
+${streetAddress}, N°${houseNumber}, ${postalCode}, ${addressComplement}
+      \n\nForma de pagamento:
+${paymentMethod}
+      \n\nObservações:
+${observation}
     `;
 
     Linking.openURL(
@@ -69,13 +77,13 @@ rua, bairro, CEP, número e complemento!
 
   return (
     <View className="flex-1 pt-8">
-      <Header title="Seu carrinho" />
+      <Header />
 
       <KeyboardAwareScrollView>
         <ScrollView>
           <View className="p-5 flex-1">
             {cartStore.products.length > 0 ? (
-              <View className="border-b border-slate-700">
+              <View>
                 {cartStore.products.map((product) => (
                   <Product
                     key={product.id}
@@ -90,27 +98,95 @@ rua, bairro, CEP, número e complemento!
               </Text>
             )}
 
-            <View className="flex-row gap-2 items-center mt-5 mb-4">
+            <View className="flex-row gap-2 items-center mt-5">
               <Text className="text-white text-xl font-subtitle">Total:</Text>
               <Text className="text-lime-400 text-2xl font-heading">
                 {total}
               </Text>
             </View>
 
-            <Input
-              placeholder="Informe o endereço de entrega com rua, bairro, CEP, número e complemento..."
-              onChangeText={setAdress}
-              // blurOnSubmit={true}
-              // onSubmitEditing={handleOrder}
-              // returnKeyType="next"
-            />
+            <Text className="text-white text-xl font-subtitle border-t border-slate-700 pt-5 mt-4 mb-4">
+              Informações para entrega
+            </Text>
+
+            <View className="gap-2">
+              <Text className="text-white font-subtitle text-base">
+                Nome do cliente
+              </Text>
+              <Input
+                autoComplete="name"
+                placeholder="Quem receberá o pedido?"
+                onChangeText={setClientName}
+              />
+
+              <Text className="text-white font-subtitle text-base">
+                Endereço
+              </Text>
+              <View className="flex-row justify-between flex-wrap">
+                <Input
+                  autoComplete="street-address"
+                  placeholder="Rua"
+                  onChangeText={setStreetAddress}
+                  className="w-[68%]"
+                />
+                <Input
+                  keyboardType="numeric"
+                  placeholder="Número"
+                  onChangeText={setHouseNumber}
+                  className="w-[30%]"
+                />
+
+                <Input
+                  keyboardType="numeric"
+                  autoComplete="postal-code"
+                  placeholder="Cep"
+                  onChangeText={setPostalCode}
+                  className="w-[30%]"
+                />
+
+                <Input
+                  autoComplete="address-line2"
+                  placeholder="Bloco, casa, apto..."
+                  onChangeText={setAddressComplement}
+                  className="w-[68%]"
+                />
+              </View>
+
+              <Text className="text-white font-subtitle text-base">
+                Forma de pagamento
+              </Text>
+              <Select
+                selectedValue={paymentMethod}
+                onValueChange={(itemValue) => setPaymentMethod(itemValue)}
+                items={[
+                  { label: "--Escolha uma opção--", value: "Não selecionada" },
+                  { label: "Dinheiro", value: "Dinheiro" },
+                  { label: "PIX", value: "PIX" },
+                  { label: "Cartão de Crédito", value: "Cartão de Crédito" },
+                  { label: "Cartão de Débito", value: "Cartão de Débito" },
+                ]}
+              />
+
+              <Text className="text-white font-subtitle text-base">
+                Observações
+              </Text>
+              <Input
+                textAlignVertical="top"
+                placeholder="Informe algum detalhe do pedido que gostaria que soubéssemos."
+                onChangeText={setObservation}
+                className="h-32 bg-slate-800 rounded-md px-4 py-3 font-body text-sm text-white"
+                // blurOnSubmit={true}
+                // onSubmitEditing={handleOrder}
+                // returnKeyType="next"
+              />
+            </View>
           </View>
         </ScrollView>
       </KeyboardAwareScrollView>
 
       <View className="p-5 gap-5">
         <Button onPress={handleOrder}>
-          <Button.Text>Enviar pedido</Button.Text>
+          <Button.Text>Enviar pedido via WhatsApp</Button.Text>
           <Button.Icon>
             <Feather name="arrow-right-circle" size={20} />
           </Button.Icon>

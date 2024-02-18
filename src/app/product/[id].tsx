@@ -27,7 +27,7 @@ export default function Product() {
   }
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 pt-8">
       <Image
         source={product.cover}
         className="w-full h-52"
