@@ -186,7 +186,7 @@ ${observation}
 
       <View className="p-5 gap-5">
         <Button onPress={handleOrder}>
-          <Button.Text>Enviar pedido via WhatsApp</Button.Text>
+          <Button.Text>Enviar pedido</Button.Text>
           <Button.Icon>
             <Feather name="arrow-right-circle" size={20} />
           </Button.Icon>
