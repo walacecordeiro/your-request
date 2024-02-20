@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "your-request",
+    "name": "Hora do Rango",
     "slug": "your-request",
     "version": "1.0.2",
     "orientation": "portrait",
@@ -47,6 +47,12 @@
       "eas": {
         "projectId": "7b5884f7-2b74-4521-9860-edfae0f1c181"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/7b5884f7-2b74-4521-9860-edfae0f1c181"
     }
   }
 }

@@ -3,21 +3,30 @@
     "version": ">= 7.2.0"
   },
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-    },
     "preview": {
-      "distribution": "internal"
-    },
-
-    "previewAPK": {
       "android": {
         "buildType": "apk"
-      }
+      },
+      "channel": "preview"
     },
-    
-    "production": {}
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      },
+      "channel": "preview2"
+    },
+    "preview3": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "preview3"
+    },
+    "preview4": {
+      "distribution": "internal",
+      "channel": "preview4"
+    },
+    "production": {
+      "channel": "production"
+    }
   },
   "submit": {
     "production": {}
